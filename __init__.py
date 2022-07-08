@@ -6,23 +6,22 @@ from re import A
 import requests
 import json
 import time
+import pprint
 from pathlib import Path
 from binaryninjaui import (UIAction, UIActionHandler, Menu, UIContext)
 from PySide6.QtCore import QStandardPaths
 
 from binaryninja.platform import Platform
 from binaryninja.plugin import BackgroundTaskThread, PluginCommand
-from binaryninja.log import (log_error, log_info, log_warn)
+from binaryninja.log import (log_error, log_info, log_warn, log_debug)
 from binaryninja.settings import Settings
 from binaryninja.interaction import get_text_line_input, show_message_box, get_choice_input
 from binaryninja.mainthread import execute_on_main_thread
 
-#Using to debug request URLs
-def get_raw_request(request):
-	request = request.prepare() if isinstance(request, requests.Request) else request
-	headers = '\r\n'.join(f'{k}: {v}' for k, v in request.headers.items())
-	body = '' if request.body is None else request.body.decode() if isinstance(request.body, bytes) else request.body
-	return f'{request.method} {request.path_url} HTTP/1.1\r\n{headers}\r\n\r\n{body}'
+# Yes, yes, I should use type hints.
+# Also, this should be a class.
+# Also, it should be a sidebar panel with a history viewer.
+# Going for quick and dirty for now.
 
 URL = 'https://api.unpac.me/api/v1'
 
@@ -77,9 +76,6 @@ def check_key(key):
 		return True
 	return False
 
-# Yes, yes, I should use type hints.
-# Also, this should be a class. Going for quick and dirty for now.
-
 def endpoint():
 	key = Settings().get_string("unpacme.api_key")
 	if not check_key(key):
@@ -105,18 +101,38 @@ def download(actioncontext):
 			log_error(f'Failed due to {data["error"]} : {data["description"]}')
 			break
 		history += data['results']
+		log_debug(pprint.pformat(data['results']))
 		cursor = data['cursor']
 	choices = [x['sha256'] for x in history]
-	choice = get_choice_input("Select Binary", "Download", choices)
+	choice = get_choice_input("Select History Entry", "Select", choices)
 	if choice is None:
 		return
 	hash = history[choice]['sha256']
 	id = history[choice]['id']
-	r = req.get(f'{URL}/private/download/{choices[choice]}', timeout=10)
+	r = req.get(f'{URL}/private/results/{id}', timeout=10)
 	if r.status_code != 200:
-		log_error(f'Unable to download {URL}/private/download/{choices[choice]}')
+		log_warn(f"Unable to query status for id {id}")
+		return
+	if "status" not in r.json().keys(): #Can't combine because need to check property separately
+		log_warn(f"Unable to query status for id {id}")
+		return
+	if r.json()["status"] != "complete":
+		log_warn(f"Submission {id} is in status {r.json()['status']}.")
+		return
+	r = req.get(f'{URL}/private/search/hash/{hash}', timeout=10)
+	log_debug(pprint.pformat(r.json()))
+	childchoices = [hash]
+	for result in r.json()['results']:
+		childchoices += result["children"]
+	childchoice = get_choice_input("Select Binary (same again will download original, others are unpacked children)", "Download", childchoices)
+	if childchoice is None:
+		return
+	dlhash = childchoices[childchoice]
+	r = req.get(f'{URL}/private/download/{dlhash}', timeout=10)
+	if r.status_code != 200:
+		log_error(f'Unable to download {URL}/private/download/{dlhash}')
 	else:
-		dest = Path(Settings().get_string("unpacme.download_folder")) / hash
+		dest = Path(Settings().get_string("unpacme.download_folder")) / dlhash
 		open(dest, 'wb').write(r.content)
 		execute_on_main_thread(lambda: actioncontext.context.openFilename(str(dest)))
 
