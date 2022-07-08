@@ -108,6 +108,8 @@ def download(actioncontext):
 		cursor = data['cursor']
 	choices = [x['sha256'] for x in history]
 	choice = get_choice_input("Select Binary", "Download", choices)
+	if choice is None:
+		return
 	hash = history[choice]['sha256']
 	id = history[choice]['id']
 	r = req.get(f'{URL}/private/download/{choices[choice]}', timeout=10)
