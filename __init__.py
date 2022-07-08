@@ -126,7 +126,11 @@ def submit(bv):
 	r = req.post(f'{URL}/private/upload', files={'file': bv.parent_view[:]}, timeout=10)
 
 def is_valid(bv):
-	return bv.platform in [Platform['windows-x86'], Platform['windows-x86_64']]
+	if bv.platform in [Platform['windows-x86'], Platform['windows-x86_64']]:
+		# Not real MB but not sure how it's being counted, so this seems safer
+		if len(bv.parent_view) < (1000*1000*20):
+			return True
+	return False
 
 PluginCommand.register("UnpacMe\\Submit to Unpac.Me", "Submit Binary to automated UnPac.Me service", submit, is_valid)
 UIAction.registerAction("UnpacMe\\Download from Unpac.Me...")
