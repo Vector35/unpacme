@@ -1,51 +1,32 @@
-# Snippet UI Plugin (v1.19)
+# Unpac.Me Plugin (v1.19)
 Author: **Vector 35 Inc**
 
-_Powerful code-editing plugin for writing and managing python code-snippets with syntax highlighting, hotkey binding and other features_
+_Simple plugin to interface Binary Ninja with the UnpacMe automatic unpacking service_
 
 ## Description:
 
-The snippet editor started as a simple example UI plugin to demonstrate new features available to UI plugins. It has turned into a functionally useful plugin in its own right. The snippet editor allows you to write small bits of code that might not be big enough to warrant the effort of a full plugin but are long enough that you don't want to retype them every time in the python-console!
+This plugin lets you easily submit binaries and download unpacked results from [unpac.me](https://unpac.me/).
 
-As an added bonus, all snippets are added to the snippets menu and hot-keys can be associated with them as they make use of the action system. All action-system items are also available through the command-palette (CTL/CMD-p).
-
-![](https://github.com/Vector35/snippets/blob/master/media/snippets.gif?raw=true)
-
-.
-
+You will first need to sign up for a free account before you can use it. The first time you try to upload or download you will be prompted for your API Key which is available from your [account page](https://www.unpac.me/account).
 
 ## Installation Instructions
 
-### Darwin
-
-no special instructions, package manager is recommended
-
-### Linux
-
-no special instructions, package manager is recommended
-
-### Windows
-
-no special instructions, package manager is recommended
+Use the plugin manager or clone this to your [user plugin folder](https://docs.binary.ninja/getting-started.html#user-folder).
 
 ## Minimum Version
 
 This plugin requires the following minimum version of Binary Ninja:
 
-* 1528
+* 2469
 
+## Troubleshooting
 
-
-## Required Dependencies
-
-The following dependencies are required for this plugin:
-
- * pip - pygments>=2.7.0,<2.9.0
-
+If you receive python errors, you may need to upgrade your version of python to support requests with HTTPS support.
 
 ## License
 
 This plugin is released under a MIT license.
+
 ## Metadata Version
 
 2
