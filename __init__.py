@@ -116,7 +116,7 @@ def download(actioncontext):
 	else:
 		dest = Path(Settings().get_string("unpacme.download_folder")) / hash
 		open(dest, 'wb').write(r.content)
-		execute_on_main_thread(actioncontext.context.openFilename(str(dest)))
+		execute_on_main_thread(lambda: actioncontext.context.openFilename(str(dest)))
 
 def submit(bv):
 	req = endpoint()
