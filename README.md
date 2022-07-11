@@ -1,4 +1,4 @@
-# Unpac.Me Plugin (v1.19)
+# Unpac.Me Plugin (v1.00)
 Author: **Vector 35 Inc**
 
 _Simple plugin to interface Binary Ninja with the UnpacMe automatic unpacking service_
@@ -11,10 +11,11 @@ You will first need to sign up for a free account before you can use it. The fir
 
 Current features:
 
-- Upload a file to be unpacked. Available from the `Plugins/UnpackMe` menu and command-palette, works on the currently open file.
-- Download a previously extracted file. Available from the `Plugins/UnpackMe` menu and command-palette.
+- Upload a file to be unpacked. Available from the `Plugins/UnpacMe` menu and command-palette, works on the currently open file.
+- Download a previously extracted file. Available from the `Plugins/UnpacMe` menu and command-palette.
 
-![](https://github.com/Vector35/unpackme/blob/master/media/download.png?raw=true)
+![](https://github.com/Vector35/unpacme/blob/master/media/download.png?raw=true)
+![](https://github.com/Vector35/unpacme/blob/master/media/menu.png?raw=true)
 
 ## Installation Instructions
 
