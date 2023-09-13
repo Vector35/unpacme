@@ -22,9 +22,8 @@
         "Linux": "no special instructions, package manager is recommended",
         "Windows": "no special instructions, package manager is recommended"
     },
-    "dependencies": {
-    },
-    "version": "1.00",
+    "dependencies": {},
+    "version": "1.1",
     "author": "Vector 35 Inc",
     "minimumbinaryninjaversion": 3469
 }
