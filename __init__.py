@@ -119,11 +119,15 @@ def download(actioncontext):
 	if r.json()["status"] != "complete":
 		log_warn(f"Submission {id} is in status {r.json()['status']}.")
 		return
-	r = req.get(f'{URL}/private/search/hash/{hash}', timeout=10)
-	log_debug(pprint.pformat(r.json()))
+	data = {'value': hash, 'repo_type': "malware"}
+	r = req.post(f'{URL}/private/search/term/sha256', json=data, timeout=10)
 	childchoices = [hash]
 	for result in r.json()['results']:
-		childchoices += result["children"]
+		for analysis in result['analysis']:
+			id = analysis['id']
+			r2 = req.get(f'{URL}/private/results/{id}', timeout=10)
+			for result2 in r2.json()["results"]:
+				childchoices.append(result2["hashes"]["sha256"])
 	childchoice = get_choice_input("Select Binary (same again will download original, others are unpacked children)", "Download", childchoices)
 	if childchoice is None:
 		return
