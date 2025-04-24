@@ -1,4 +1,5 @@
-# Unpac.Me Plugin (v1.1)
+# Unpac.Me Plugin (v1.2)
+
 Author: **Vector 35 Inc**
 
 _Simple plugin to interface Binary Ninja with the UnpacMe automatic unpacking service_
@@ -25,7 +26,7 @@ Use the plugin manager or clone this to your [user plugin folder](https://docs.b
 
 This plugin requires the following minimum version of Binary Ninja:
 
-* 2469
+* 3469
 
 ## Troubleshooting
 
