@@ -148,7 +148,7 @@ def submit(bv):
 def is_valid(bv):
 	if bv.platform in [Platform['windows-x86'], Platform['windows-x86_64']]:
 		# Not real MB but not sure how it's being counted, so this seems safer
-		if len(bv.parent_view) < (1000*1000*20):
+		if bv.parent_view.length < (1000*1000*20):
 			return True
 	return False
 
